@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farah Flowers - Premium Flowers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .flower-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flower-card {
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item-enter {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        
+        .cart-item-enter-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 300ms ease-in;
+        }
+        
+        .cart-item-exit {
+            opacity: 1;
+        }
+        
+        .cart-item-exit-active {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 300ms ease-out;
+        }
+        
+        .about-section {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://images.unsplash.com/photo-1526397751294-331021109fbd?ixlib=rb-4.0.3');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-spa text-2xl text-pink-500 mr-2"></i>
+                <a href="#" class="heading-font text-2xl font-bold text-gray-800">Farah Flowers</a>
+            </div>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-800 hover:text-pink-500 transition">Home</a>
+                <a href="#products" class="text-gray-800 hover:text-pink-500 transition">Products</a>
+                <a href="#about" class="text-gray-800 hover:text-pink-500 transition">About</a>
+                <a href="#contact" class="text-gray-800 hover:text-pink-500 transition">Contact</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="cart-btn" class="relative">
+                    <i class="fas fa-shopping-cart text-xl text-gray-700 hover:text-pink-500 transition"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                
+                <button class="md:hidden" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-xl text-gray-700"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
+            <a href="#home" class="block py-2 text-gray-800 hover:text-pink-500 transition">Home</a>
+            <a href="#products" class="block py-2 text-gray-800 hover:text-pink-500 transition">Products</a>
+            <a href="#about" class="block py-2 text-gray-800 hover:text-pink-500 transition">About</a>
+            <a href="#contact" class="block py-2 text-gray-800 hover:text-pink-500 transition">Contact</a>
+        </div>
+    </nav>
+    
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-xl z-50 transform translate-x-full transition-transform duration-300 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold heading-font">Your Cart</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="cart-items" class="space-y-4">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-10 text-gray-500">
+                    <i class="fas fa-shopping-cart text-4xl mb-3"></i>
+                    <p>Your cart is empty</p>
+                </div>
+            </div>
+            
+            <div class="border-t mt-6 pt-6">
+                <div class="flex justify-between mb-4">
+                    <span class="font-semibold">Subtotal:</span>
+                    <span id="cart-subtotal">$0.00</span>
+                </div>
+                <button class="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-medium transition">
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="home" class="hero-section h-screen flex items-center justify-center text-center text-white">
+        <div class="px-4 max-w-4xl">
+            <h1 class="heading-font text-4xl md:text-6xl font-bold mb-6">Beautiful Flowers for Every Occasion</h1>
+            <p class="text-xl mb-8">Handcrafted bouquets with fresh, premium flowers delivered to your doorstep</p>
+            <a href="#products" class="inline-block bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-lg font-medium transition">Shop Now</a>
+        </div>
+    </section>
+    
+    <!-- Featured Categories -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="heading-font text-3xl font-bold text-center mb-12">Our Collections</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="relative rounded-xl overflow-hidden h-64 group">
+                    <img src="https://images.unsplash.com/photo-1526397751294-331021109fbd?ixlib=rb-4.0.3" alt="Wedding Flowers" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center group-hover:bg-opacity-50 transition">
+                        <h3 class="text-white heading-font text-2xl font-bold">Wedding Flowers</h3>
+                    </div>
+                </div>
+                
+                <div class="relative rounded-xl overflow-hidden h-64 group">
+                    <img src="https://images.unsplash.com/photo-1459156212016-c812468e2115?ixlib=rb-4.0.3" alt="Seasonal Bouquets" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center group-hover:bg-opacity-50 transition">
+                        <h3 class="text-white heading-font text-2xl font-bold">Seasonal Bouquets</h3>
+                    </div>
+                </div>
+                
+                <div class="relative rounded-xl overflow-hidden h-64 group">
+                    <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3" alt="Special Occasions" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center group-hover:bg-opacity-50 transition">
+                        <h3 class="text-white heading-font text-2xl font-bold">Special Occasions</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Products Section -->
+    <section id="products" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="heading-font text-3xl font-bold text-center mb-4">Our Premium Flowers</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Each bouquet is carefully arranged by our expert florists using the freshest seasonal flowers.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3" alt="Rose Elegance" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">BESTSELLER</div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Rose Elegance</h3>
+                        <p class="text-gray-600 mb-4">A dozen premium red roses with baby's breath accents</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$49.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="1" data-name="Rose Elegance" data-price="49.99" data-image="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3" alt="Spring Symphony" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Spring Symphony</h3>
+                        <p class="text-gray-600 mb-4">Mixed seasonal flowers in a beautiful hand-tied bouquet</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$39.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="2" data-name="Spring Symphony" data-price="39.99" data-image="https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 3 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1459156212016-c812468e2115?ixlib=rb-4.0.3" alt="Tulip Dreams" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        <div class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">NEW</div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Tulip Dreams</h3>
+                        <p class="text-gray-600 mb-4">Vibrant tulips in a variety of colors, perfect for spring</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$34.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="3" data-name="Tulip Dreams" data-price="34.99" data-image="https://images.unsplash.com/photo-1459156212016-c812468e2115?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.极3" alt="Orchid Serenity" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Orchid Serenity</h3>
+                        <p class="text-gray-600 mb-4">Elegant white orchids in a modern ceramic pot</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$59.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="4" data-name="Orchid Serenity" data-price="59.99" data-image="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 5 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1526047932273-341f6830313b?ixlib=rb-4.0.3" alt="Lavender Fields" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Lavender Fields</h3>
+                        <p class="text-gray-600 mb-4">Fragrant lavender bouquet with eucalyptus accents</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$42.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="5" data-name="Lavender Fields" data-price="42.99" data-image="https://images.unsplash.com/photo-1526047932273-341f6830313b?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 6 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1526399258368-00b5e0bb2df6?ixlib=rb-4.0.3" alt="Sunflower Joy" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Sunflower Joy</h3>
+                        <p class="text-gray-600 mb-4">Bright sunflowers with seasonal greenery</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$37.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="6" data-name="Sunflower Joy" data-price="37.99" data-image="https://images.unsplash.com/photo-1526399258368-00b5e0bb2df6?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 7 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-4.0.3" alt="Peony Perfection" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                        <div class="absolute top-2 right-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full">BESTSELLER</div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Peony Perfection</h3>
+                        <p class="text-gray-600 mb-4">Lush peonies in soft pink and white tones</p>
+                        <div class="极flex justify-between items-center">
+                            <span class="font-bold text-lg">$54.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="7" data-name="Peony Perfection" data-price="54.99" data-image="https://images.unsplash.com/photo-1490750967868-88aa4486c946?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 8 -->
+                <div class="flower-card bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-4.0.3" alt="Wildflower Charm" class="w-full h-full object-cover transition duration-500 hover:scale-105">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="heading-font text-xl font-bold mb-2">Wildflower Charm</h3>
+                        <p class="text-gray-600 mb-4">A rustic mix of wildflowers in a mason jar</p>
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-lg">$45.99</span>
+                            <button class="add-to-cart bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition" data-id="8" data-name="Wildflower Charm" data-price="45.99" data-image="https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-4.0.3">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="about-section py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto bg-white bg-opacity-90 rounded-xl shadow-lg overflow-hidden">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-8">
+                        <h2 class="heading-font text-3xl font-bold mb-6 text-gray-800">Our Story</h2>
+                        <p class="text-gray-600 mb-4">
+                            Founded in 2010, Farah Flowers began as a small boutique florist in the heart of the city. Our founder, Farah, had a vision to bring joy to people's lives through the beauty of flowers.
+                        </p>
+                        <p class="text-gray-600 mb-4">
+                            What started as a single shop has grown into a beloved local institution, known for our exquisite arrangements and exceptional customer service. We work directly with local growers to ensure the freshest, most beautiful blooms for our customers.
+                        </p>
+                        <p class="text-gray-600 mb-6">
+                            Every bouquet we create is a work of art, designed to bring happiness to both the giver and the recipient. We believe flowers have the power to brighten any day and make every occasion special.
+                        </p>
+                        <div class="flex space-x-4">
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-pink-500">12+</div>
+                                <div class="text-gray-600">Years in Business</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-pink-500">50+</div>
+                                <div class="text-gray-600">Local Growers</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-3xl font-bold text-pink-500">10K+</div>
+                                <div class="text-gray-600">Happy Customers</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-4.0.3" alt="Our florist at work" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="heading-font text-3xl font-bold text-center mb-12">Get In Touch</h2>
+            
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="heading-font text-xl font-bold mb-6">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-pink-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-map-marker-alt text-pink-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Our Location</h4>
+                                <p class="text-gray-600">123 Flower Street, Bloomington, CA 92316</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-pink-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-phone text-pink-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Phone</h4>
+                                <p class="text-gray-600">(555) 123-4567</p>
+                                <p class="text-gray-600">Mon-Fri: 9am-6pm</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-pink-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-envelope text-pink-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Email</h4>
+                                <p class="text-gray-600">hello@farahflowers.com</p>
+                                <p class="text-gray-600">Response within 24 hours</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-pink-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-store text-pink-500"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Store Hours</h4>
+                                <p class="text-gray-600">Monday-Friday: 9am-7pm</p>
+                                <p class="text-gray-600">Saturday: 10am-5pm</p>
+                                <p class="text-gray-600">Sunday: 11am-4pm</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h4 class="font-semibold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="bg-pink-100 hover:bg-pink-200 text-pink-500 p-3 rounded-full transition">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="bg-pink-100 hover:bg-pink-200 text-pink-500 p-3 rounded-full transition">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="bg-pink-100 hover:bg-pink-200 text-pink-500 p-3 rounded-full transition">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="bg-pink-100 hover:bg-pink-200 text-pink-500 p-3 rounded-full transition">
+                                <i class="fab fa-pinterest"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="heading-font text-xl font-bold mb-6">Send Us a Message</h3>
+                    <form>
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 mb-2">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="phone" class="block text-gray-700 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="message" class="block text-gray-700 mb-2">Your Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-medium transition">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="heading-font text-3xl font-bold text-center mb-12">What Our Customers Say</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-600">5.0</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">"The flowers were absolutely stunning and arrived fresh and beautiful. My wife was thrilled with her anniversary bouquet!"</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah J." class="w-10 h-10 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Sarah J.</h4>
+                            <p class="text-gray-500 text-sm">Wedding Client</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-600">5.0</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">"Farah Flowers went above and beyond for my mother's birthday. The arrangement was even more beautiful than I imagined."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael T." class="w-10 h-10 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Michael T.</h4>
+                            <p class="text-gray-500 text-sm">Regular Customer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-600">5.0</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">"The wedding flowers were perfect! Farah understood exactly what we wanted and created magical arrangements for our special day."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jessica L." class="w-10 h-10 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold">Jessica L.</h4>
+                            <p class="text-gray-500 text-sm">Bride</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Newsletter -->
+    <section class="py-16 bg-pink-50">
+        <div class="container mx-auto px-4 max-w-4xl text-center">
+            <h2 class="heading-font text-3xl font-bold mb-4">Join Our Flower Club</h2>
+            <p class="text-gray-600 mb-8">Subscribe to receive seasonal flower tips, exclusive offers, and 10% off your first order.</p>
+            
+            <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+                <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition">
+                <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-medium transition whitespace-nowrap">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-spa text-2xl text-pink-400 mr-2"></i>
+                        <span class="heading-font text-xl font-bold">Farah Flowers</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Bringing beauty and joy through flowers since 2010.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-pink-400 transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-pink-400 transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-pink-400 transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-pink-400 transition">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="heading-font text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-pink-400 transition">Home</a></li>
+                        <li><a href="#products" class="text-gray-400 hover:text-pink-400 transition">Shop</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-pink-400 transition">About Us</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-pink-400 transition">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pink-400 transition">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="heading-font text-lg font-bold mb-4">Customer Service</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-pink-400 transition">Shipping Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pink-400 transition">Return Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pink-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pink-400 transition">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-pink-400 transition">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="heading-font text-lg font-bold mb-4">Contact Info</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-pink-400 mr-2 mt-1"></i>
+                            <span>123 Flower Street, Bloomington, CA 92316</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone text-pink-400 mr-2"></i>
+                            <span>(555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-pink-400 mr-2"></i>
+                            <span>hello@farahflowers.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">© 2023 Farah Flowers. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <img src="https://via.placeholder.com/40x25?text=Visa" alt="Visa" class="h-6">
+                    <img src="https://via.placeholder.com/40x25?text=MC" alt="Mastercard" class="h-6">
+                    <img src="https://via.placeholder.com/40x25?text=Amex" alt="American Express" class="h-6">
+                    <img src="https://via.placeholder.com/40x25?text=PayPal" alt="PayPal" class="h-6">
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Cart functionality
+        const cartBtn = document.getElementById('cart-btn');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const closeCart = document.getElementById('close-cart');
+        const cartCount = document.getElementById('cart-count');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartItems = document.getElementById('cart-items');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        
+        let cart = [];
+        
+        // Toggle cart sidebar
+        cartBtn.addEventListener('click', () => {
+            cartSidebar.classList.remove('translate-x-full');
+        });
+        
+        closeCart.addEventListener('click', () => {
+            cartSidebar.classList.add('translate-x-full');
+        });
+        
+        // Add to cart functionality
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const price = parseFloat(button.getAttribute('data-price'));
+                const image = button.getAttribute('data-image');
+                
+                // Check if item already exists in cart
+                const existingItem = cart.find(item => item.id === id);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        id,
+                        name,
+                        price,
+                        image,
+                        quantity: 1
+                    });
+                }
+                
+                updateCart();
+                
+                // Show cart sidebar when adding an item
+                cartSidebar.classList.remove('translate-x-full');
+                
+                // Add animation to button
+                button.innerHTML = '<i class="fas fa-check mr-2"></i> Added';
+                button.classList.remove('bg-pink-500', 'hover:bg-pink-600');
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+                
+                setTimeout(() => {
+                    button.innerHTML = 'Add to Cart';
+                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    button.classList.add('bg-pink-500', 'hover:bg-pink-600');
+                }, 2000);
+            });
+        });
+        
+        // Update cart UI
+        function updateCart() {
+            // Update cart count
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            
+            // Update subtotal
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+            
+            // Update cart items
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-10 text-gray-500">
+                        <i class="fas fa-shopping-cart text-4xl mb-3"></i>
+                        <p>Your cart is empty</p>
+                    </div>
+                `;
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <div class="flex items-center">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg mr-4">
+                            <div>
+                                <h4 class="font-semibold">${item.name}</h4>
+                                <p class="text-gray-600">$${item.price.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <button class="decrease-quantity px-2 py-1 border rounded-l-lg" data-id="${item.id}">-</button>
+                            <span class="px-3 py-1 border-t border-b">${item.quantity}</span>
+                            <button class="increase-quantity px-2 py-1 border rounded-r-lg" data-id="${item.id}">+</button>
+                            <button class="remove-item ml-4 text-red-500 hover:text-red-700" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners to new buttons
+                document.querySelectorAll('.decrease-quantity').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        
+                        if (item.quantity > 1) {
+                            item.quantity -= 1;
+                        } else {
+                            cart = cart.filter(item => item.id !== id);
+                        }
+                        
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.increase-quantity').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id');
+                        const item = cart.find(item => item.id === id);
+                        item.quantity += 1;
+                        updateCart();
+                    });
+                });
+                
+                document.querySelectorAll('.remove-item').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.closest('button').getAttribute('data-id');
+                        cart = cart.filter(item => item.id !== id);
+                        updateCart();
+                    });
+                });
+            }
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
